@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Инструкция по работе с внешней обработкой 1С «Прейскурант»">
+  <title>Прейскурант — инструкция</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0b0f17;
+      --surface: #121826;
+      --surface-2: #182132;
+      --border: #293449;
+      --text: #e8edf7;
+      --muted: #a5b0c4;
+      --accent: #65d6ad;
+      --accent-soft: rgba(101, 214, 173, 0.12);
+      --warning: #ffd479;
+      --shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at 10% 0%, rgba(101, 214, 173, 0.09), transparent 30rem),
+        radial-gradient(circle at 90% 15%, rgba(92, 126, 255, 0.08), transparent 28rem),
+        var(--bg);
+      color: var(--text);
+      font: 16px/1.65 Inter, "Segoe UI", Arial, sans-serif;
+    }
+
+    a { color: var(--accent); }
+
+    .container {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    header { padding: 52px 0 40px; }
+
+    .back {
+      display: inline-block;
+      margin-bottom: 28px;
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .back:hover { color: var(--text); }
+
+    .eyebrow {
+      margin: 0 0 12px;
+      color: var(--accent);
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 800px;
+      margin: 0;
+      font-size: clamp(2.6rem, 7vw, 5.4rem);
+      line-height: 1;
+      letter-spacing: -0.055em;
+    }
+
+    .lead {
+      max-width: 780px;
+      margin: 24px 0 0;
+      color: var(--muted);
+      font-size: clamp(1.05rem, 2vw, 1.3rem);
+    }
+
+    .notice {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      margin-top: 30px;
+      padding: 18px 20px;
+      border: 1px solid rgba(101, 214, 173, 0.35);
+      border-radius: 14px;
+      background: var(--accent-soft);
+    }
+
+    .notice p { margin: 0; }
+    .notice strong { color: var(--accent); }
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      border-block: 1px solid var(--border);
+      background: rgba(11, 15, 23, 0.88);
+      backdrop-filter: blur(14px);
+    }
+
+    nav .container {
+      display: flex;
+      gap: 24px;
+      overflow-x: auto;
+      padding-block: 14px;
+    }
+
+    nav a {
+      flex: 0 0 auto;
+      color: var(--muted);
+      font-size: 0.92rem;
+      font-weight: 650;
+      text-decoration: none;
+    }
+
+    nav a:hover { color: var(--text); }
+    main { padding: 26px 0 76px; }
+    section { padding: 42px 0 10px; scroll-margin-top: 58px; }
+
+    h2 {
+      margin: 0 0 18px;
+      font-size: clamp(1.7rem, 4vw, 2.5rem);
+      letter-spacing: -0.035em;
+    }
+
+    h3 { margin: 0 0 10px; font-size: 1.05rem; }
+    p { margin: 0 0 16px; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      padding: 22px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: linear-gradient(145deg, rgba(24, 33, 50, 0.92), rgba(18, 24, 38, 0.92));
+      box-shadow: var(--shadow);
+    }
+
+    .card p:last-child { margin-bottom: 0; }
+    .muted { color: var(--muted); }
+
+    .steps {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      counter-reset: steps;
+    }
+
+    .steps li {
+      position: relative;
+      min-height: 58px;
+      margin-bottom: 12px;
+      padding: 15px 18px 15px 68px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: var(--surface);
+      counter-increment: steps;
+    }
+
+    .steps li::before {
+      position: absolute;
+      top: 13px;
+      left: 16px;
+      display: grid;
+      width: 36px;
+      height: 36px;
+      place-items: center;
+      border-radius: 10px;
+      background: var(--accent);
+      color: #07130f;
+      font-weight: 850;
+      content: counter(steps);
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      color: var(--text);
+    }
+
+    th, td {
+      padding: 15px 17px;
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th:last-child, td:last-child { border-right: 0; }
+    tbody tr:last-child td { border-bottom: 0; }
+
+    th {
+      background: #1d283a;
+      color: var(--accent);
+      font-size: 0.78rem;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+
+    tbody tr:nth-child(even) { background: rgba(255, 255, 255, 0.018); }
+    tbody tr:hover { background: rgba(101, 214, 173, 0.055); }
+
+    code {
+      padding: 0.15em 0.4em;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: #0d1320;
+      color: #c6f5e3;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 0.92em;
+    }
+
+    .tag {
+      display: inline-block;
+      margin: 2px 4px 2px 0;
+      padding: 3px 8px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      color: var(--muted);
+      font-size: 0.82rem;
+      white-space: nowrap;
+    }
+
+    .warning { color: var(--warning); }
+
+    .formula {
+      margin-top: 16px;
+      padding: 18px 20px;
+      border-left: 4px solid var(--accent);
+      border-radius: 0 12px 12px 0;
+      background: var(--surface-2);
+    }
+
+    footer {
+      padding: 26px 0 40px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 720px) {
+      header { padding-top: 32px; }
+      .grid { grid-template-columns: 1fr; }
+      th, td { padding: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="container">
+    <a class="back" href="index.html">← Все инструкции</a>
+    <p class="eyebrow">Внешняя обработка 1С</p>
+    <h1>Прейскурант</h1>
+    <p class="lead">
+      Расчёт учётной цены поставки по спецификации с распределением транспортных,
+      таможенных и дополнительных расходов.
+    </p>
+    <div class="notice">
+      <div aria-hidden="true">ⓘ</div>
+      <p>
+        <strong>Напоминание:</strong> эта инструкция также есть в самой обработке.
+        Нажмите кнопку <strong>Справка</strong> на командной панели — там находится
+        описание для установленной версии.
+      </p>
+    </div>
+  </header>
+
+  <nav aria-label="Навигация по инструкции">
+    <div class="container">
+      <a href="#start">Порядок работы</a>
+      <a href="#fields">Поля и расчёт</a>
+      <a href="#excel">Загрузка из Excel</a>
+      <a href="#comparison">Сравнение</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <section id="start">
+      <h2>Порядок работы</h2>
+      <ol class="steps">
+        <li>Заполните курс в валюту учёта, курс доллара и суммы статей затрат по декларации.</li>
+        <li>
+          Добавьте спецификацию вручную, заполните её из документа <strong>Приход</strong>
+          или загрузите подготовленный файл Excel.
+        </li>
+        <li>
+          Проверьте количество, контрактную цену и ставку пошлины для каждой позиции,
+          затем нажмите <strong>Рассчитать</strong>.
+        </li>
+        <li>
+          Проверьте рассчитанные суммы. При предупреждении исправьте исходные данные
+          и повторите расчёт.
+        </li>
+        <li>
+          Для сравнения вариантов задайте имя и нажмите
+          <strong>Сохранить для сравнения</strong>.
+        </li>
+      </ol>
+    </section>
+
+    <section id="fields">
+      <h2>Поля и методика расчёта</h2>
+      <div class="grid">
+        <article class="card">
+          <h3>Курсы валют</h3>
+          <p class="muted">
+            «Курс в валюту учёта» — количество единиц валюты учёта в одной единице
+            валюты закупки. «Курс доллара» нужен для цены в USD и цен с НДС.
+          </p>
+        </article>
+        <article class="card">
+          <h3>Статьи затрат</h3>
+          <p class="muted">
+            Транспорт до границы, таможенный сбор, транспорт по РБ, компенсация,
+            услуги брокера и комиссия банка задаются итоговыми суммами в валюте учёта.
+          </p>
+        </article>
+        <article class="card">
+          <h3>Распределение</h3>
+          <p class="muted">
+            Статьи распределяются пропорционально сумме инвойса в валюте учёта.
+            Копейки закрываются на последней строке с ненулевой базой.
+          </p>
+        </article>
+        <article class="card">
+          <h3>Пошлина</h3>
+          <p class="muted">
+            Общая пошлина по ДТ распределяется с учётом стоимости строки и её ставки.
+            Ставку указывайте в процентах: например, <code>5</code> или <code>5%</code>.
+          </p>
+        </article>
+      </div>
+
+      <div class="formula">
+        <strong>Результат строки:</strong> сумма инвойса в валюте учёта + доли всех статей
+        затрат + доля пошлины. Учётная цена равна результату строки, делённому на количество.
+        Также выводятся цена в долларах и цены с НДС 20% и 22%.
+      </div>
+
+      <p class="muted" style="margin-top: 18px">
+        Названия валют носят информационный характер, курсы автоматически не подставляются.
+        Если сумма инвойса равна нулю или пошлину не на что распределить, обработка покажет
+        предупреждение. Расчёт с предупреждением сохранить для сравнения нельзя.
+      </p>
+    </section>
+
+    <section id="excel">
+      <h2>Формат файла Excel</h2>
+      <p>
+        Поддерживаются файлы <span class="tag">.xlsx</span><span class="tag">.xls</span>
+        <span class="tag">.csv</span><span class="tag">.txt</span>.
+        Из Excel читаются первые четыре колонки листа — строго A, B, C, D.
+        Заголовок можно оставить: строка с нечисловым количеством будет пропущена.
+      </p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Колонка</th>
+              <th>Поле</th>
+              <th>Что указывать</th>
+              <th>Пример</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>A</strong></td>
+              <td>Код</td>
+              <td>
+                Код товара. Обязателен. Числовые коды нормализуются:
+                <code>00123</code> и <code>123</code> считаются одним кодом.
+              </td>
+              <td><code>00123</code></td>
+            </tr>
+            <tr>
+              <td><strong>B</strong></td>
+              <td>Количество</td>
+              <td>Число. Строка с пустым или нечисловым количеством пропускается.</td>
+              <td><code>24</code></td>
+            </tr>
+            <tr>
+              <td><strong>C</strong></td>
+              <td>Цена</td>
+              <td>
+                Контрактная цена единицы в валюте закупки. Пустая ячейка означает ноль,
+                текст вместо числа — ошибку.
+              </td>
+              <td><code>12,50</code></td>
+            </tr>
+            <tr>
+              <td><strong>D</strong></td>
+              <td>Ставка пошлины</td>
+              <td>
+                Процент без формулы. Допустим знак <code>%</code>.
+                Пустая ячейка означает нулевую ставку.
+              </td>
+              <td><code>5%</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 style="margin-top: 28px">Пример заполнения</h3>
+      <div class="table-wrap">
+        <table aria-label="Пример таблицы Excel">
+          <thead>
+            <tr>
+              <th>Код</th>
+              <th>Количество</th>
+              <th>Цена</th>
+              <th>Ставка пошлины</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>00123</td><td>24</td><td>12,50</td><td>5%</td></tr>
+            <tr><td>4507</td><td>8</td><td>103.75</td><td>0</td></tr>
+            <tr><td>AB-19</td><td>120</td><td>1 245,90</td><td>7,5</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="grid" style="margin-top: 16px">
+        <article class="card">
+          <h3>Поддерживаемые числа</h3>
+          <p class="muted">
+            Можно использовать точку или запятую как десятичный разделитель, пробелы
+            в разрядах, кавычки и знак процента. Значения <code>1.234,50</code>
+            и <code>1,234.50</code> также распознаются.
+          </p>
+        </article>
+        <article class="card">
+          <h3>Ограничения</h3>
+          <p class="muted">
+            Читается не более 5000 строк. Не объединяйте ячейки и не меняйте порядок колонок.
+            Наименование и единицу измерения добавлять не нужно: единица после загрузки — «шт».
+          </p>
+        </article>
+      </div>
+
+      <p class="warning" style="margin-top: 18px">
+        Если хотя бы в одной строке с кодом и количеством цена или ставка содержат
+        нераспознаваемый текст, файл целиком не загрузится. В сообщении будет указан номер строки.
+      </p>
+      <p class="muted">
+        Для CSV и TXT используются те же четыре колонки. Разделитель определяется по первой
+        непустой строке: табуляция, точка с запятой или запятая.
+      </p>
+    </section>
+
+    <section id="comparison">
+      <h2>Сравнение вариантов</h2>
+      <div class="grid">
+        <article class="card">
+          <h3>Расчёты</h3>
+          <p class="muted">
+            Отметьте два или более сохранённых варианта и нажмите
+            <strong>Сравнить расчёты</strong>. Будут показаны инвойс, статьи затрат,
+            итог и учётная цена по каждому коду.
+          </p>
+        </article>
+        <article class="card">
+          <h3>Документы прихода</h3>
+          <p class="muted">
+            Выберите документы и нажмите <strong>Сравнить приходы</strong>.
+            Сравниваются количество, закупочная цена и сумма по коду, а также итоги документов.
+          </p>
+        </article>
+      </div>
+      <p class="muted" style="margin-top: 18px">
+        Варианты существуют только в текущем сеансе обработки и не записываются
+        в информационную базу. Одинаковые имена автоматически получают номер.
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      Инструкция к обработке 1С «Прейскурант». Актуальную справку открывайте
+      кнопкой «Справка» в самой обработке.
+    </div>
+  </footer>
+</body>
+</html>
